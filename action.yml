@@ -22,7 +22,10 @@ inputs:
     description: 'the repository of the (markdown) file to use as comment/issue title & body'
   file_path:
     required: false
-    description: 'the path to the to the file in the provided reostiroy to use as comment/issue title & body, eg. "documentation/how-to.md'
+    description: 'the path to the to the file in the provided repository to use as comment/issue title & body, eg. "documentation/how-to.md'
+  token:
+    description: 'the token to be used for creating issue, defaults to the local repositorys token if not provided'
+    default: ${{ github.token }}
 runs:
   using: 'node12'
   main: 'dist/index.js'

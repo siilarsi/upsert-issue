@@ -1,16 +1,19 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {upsertIssue} from './issue'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    const repository: string = core.getInput('repository')
+    const text: string = core.getInput('text')
+    const token: string = core.getInput('token')
+    const orgName: string = repository.split('/')[0]
+    const repoName: string = repository.split('/')[1]
+    upsertIssue({
+      repository: repoName,
+      organization: orgName,
+      token,
+      title: text
+    })
   } catch (error) {
     core.setFailed(error.message)
   }
