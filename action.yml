@@ -1,11 +1,28 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'upsert issue'
+description: 'Create or update an issue with a comment from a file input or a path to a (readme) file'
+author: 'siilarsi'
 inputs:
-  milliseconds: # change this
-    required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+  repository:
+    required: false
+    description: 'the repository "owner/repo" for the issue'
+    default: ${{ github.repository }}
+  issue_number:
+    required: false
+    description: 'if provided a comment is created in issue otherwise a new issue is created'
+  text:
+    required: false
+    description: 'the text for the issue title & body or issue comment, only used if file not provided'
+    default: |
+      Issue created with GitHub action siilarsi/upsert-issue.
+
+      Default text when no text or (markdown) file provided.
+      Please see the [documentation](https://github.com/siilarsi/upsert-action/README.md) for how to properly use this action.
+  file_repository:
+    required: false
+    description: 'the repository of the (markdown) file to use as comment/issue title & body'
+  file_path:
+    required: false
+    description: 'the path to the to the file in the provided reostiroy to use as comment/issue title & body, eg. "documentation/how-to.md'
 runs:
   using: 'node12'
   main: 'dist/index.js'
