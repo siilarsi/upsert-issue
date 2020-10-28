@@ -15,6 +15,6 @@ export async function create(options: Options): Promise<void> {
     owner: options.owner,
     repo: options.repo,
     title: options.title,
-    ...(body && { body })
+    ...{ body }
   })
 }
