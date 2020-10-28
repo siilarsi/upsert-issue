@@ -95,11 +95,9 @@ const github = __importStar(__webpack_require__(438));
 function upsertIssue(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(options.token);
-        yield octokit.issues.create({
-            owner: options.organization,
-            repo: options.repository,
-            title: options.title
-        });
+        const title = options.title;
+        const body = options.body;
+        yield octokit.issues.create(Object.assign({ owner: options.organization, repo: options.repository, title }, body && { body }));
     });
 }
 exports.upsertIssue = upsertIssue;
