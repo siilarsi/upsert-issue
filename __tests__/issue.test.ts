@@ -18,7 +18,7 @@ describe('When creating a issue', () => {
   describe('with a valid repository and owner', () => {
     beforeEach(() => {
       issueOptions.owner = 'some-organization'
-      issueOptions.repository = 'some-repository'
+      issueOptions.repo = 'some-repository'
     })
 
     describe('and with a title with no special characters', () => {
@@ -29,10 +29,13 @@ describe('When creating a issue', () => {
       it('should be created with the title and no body', async () => {
         let actualRequestBody = {}
         let requests = nock('https://api.github.com')
-          .post(`/repos/some-organization/some-repository/issues`, (requestBody: any) => {
-            actualRequestBody = requestBody
-            return true
-          })
+          .post(
+            `/repos/some-organization/some-repository/issues`,
+            (requestBody: any) => {
+              actualRequestBody = requestBody
+              return true
+            }
+          )
           .reply(200)
 
         await issue.create(issueOptions)

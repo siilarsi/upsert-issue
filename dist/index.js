@@ -97,7 +97,7 @@ function create(options) {
         const octokit = github.getOctokit(options.token);
         const title = options.title;
         const body = options.body;
-        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repository, title }, (body && { body })));
+        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title }, (body && { body })));
     });
 }
 exports.create = create;
@@ -1477,17 +1477,14 @@ const issue = __importStar(__webpack_require__(18));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const repository = core.getInput('repository');
-            const text = core.getInput('text');
-            const token = core.getInput('token');
-            const orgName = repository.split('/')[0];
-            const repoName = repository.split('/')[1];
-            issue.create({
-                repository: repoName,
-                owner: orgName,
-                token,
-                title: text
-            });
+            const fullRepositoryPath = core.getInput('repository');
+            const options = {
+                title: core.getInput('text'),
+                token: core.getInput('token'),
+                owner: fullRepositoryPath.split('/')[0],
+                repo: fullRepositoryPath.split('/')[1]
+            };
+            issue.create(options);
         }
         catch (error) {
             core.setFailed(error.message);
