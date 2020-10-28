@@ -1,6 +1,6 @@
 # Upsert issue action
 
-Create or update an issue with a comment from text input or a path to a (readme) file.
+Create an issue or a new comment in one from text input or a from a (readme)
 
 ## Inputs
 
