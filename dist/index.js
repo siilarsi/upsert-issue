@@ -95,9 +95,8 @@ const github = __importStar(__webpack_require__(438));
 function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(options.token);
-        const title = options.title;
         const body = options.body;
-        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title }, (body && { body })));
+        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title: options.title }, { body }));
     });
 }
 exports.create = create;
@@ -1474,16 +1473,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
 const issue = __importStar(__webpack_require__(18));
+const input = __importStar(__webpack_require__(657));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const fullRepositoryPath = core.getInput('repository');
-            const options = {
-                title: core.getInput('text'),
-                token: core.getInput('token'),
-                owner: fullRepositoryPath.split('/')[0],
-                repo: fullRepositoryPath.split('/')[1]
-            };
+            const options = input.toIssueOptions(core.getInput);
             issue.create(options);
         }
         catch (error) {
@@ -4930,6 +4924,30 @@ module.exports = require("path");
 /***/ (function(module) {
 
 module.exports = require("net");
+
+/***/ }),
+
+/***/ 657:
+/***/ (function(__unusedmodule, exports) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.toIssueOptions = void 0;
+function toIssueOptions(getInput) {
+    const owner = getInput('repository').split('/')[0];
+    const repo = getInput('repository').split('/')[1];
+    const title = getInput('text');
+    const token = getInput('token');
+    return {
+        owner,
+        repo,
+        title,
+        token
+    };
+}
+exports.toIssueOptions = toIssueOptions;
+
 
 /***/ }),
 

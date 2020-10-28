@@ -1,9 +1,9 @@
 import * as github from '@actions/github'
 
 export interface Options {
-  title: string
   owner: string
   repo: string
+  title: string
   body?: string
   token: string
 }
@@ -15,6 +15,6 @@ export async function create(options: Options): Promise<void> {
     owner: options.owner,
     repo: options.repo,
     title: options.title,
-    ...{ body }
+    ...{body}
   })
 }
