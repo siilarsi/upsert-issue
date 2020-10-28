@@ -13,10 +13,10 @@ inputs:
     required: false
     description: 'the text for the issue title & body or issue comment, only used if file not provided'
     default: |
-      Issue created with GitHub action siilarsi/upsert-issue.
+      Issue created with GitHub action siilarsi/upsert-issue
 
       Default text when no text or (markdown) file provided.
-      Please see the [documentation](https://github.com/siilarsi/upsert-action/README.md) for how to properly use this action.
+      Please see the [documentation](https://github.com/siilarsi/upsert-issue/blob/main/README.md) for how to properly use this action.
   file_repository:
     required: false
     description: 'the repository of the (markdown) file to use as comment/issue title & body'

@@ -4937,14 +4937,13 @@ exports.toIssueOptions = void 0;
 function toIssueOptions(getInput) {
     const owner = getInput('repository').split('/')[0];
     const repo = getInput('repository').split('/')[1];
-    const title = getInput('text');
+    const text = getInput('text').split(/\r?\n/);
+    const title = text[0];
+    const body = text.slice(2).join('\n');
     const token = getInput('token');
-    return {
-        owner,
+    return Object.assign(Object.assign({ owner,
         repo,
-        title,
-        token
-    };
+        title }, (body && { body })), { token });
 }
 exports.toIssueOptions = toIssueOptions;
 
