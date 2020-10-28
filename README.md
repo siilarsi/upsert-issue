@@ -37,3 +37,8 @@ only valid if used with `file_path`
 
 The relative filepath to the file to be used instead of `text`, eg.
 `documentation/how-to.md`
+
+### `token`
+
+Only necessary to provide if creating an issue in a private, non-local,
+repository. Defaults to the local repositorys token.
