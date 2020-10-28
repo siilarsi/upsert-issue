@@ -1,7 +1,7 @@
 import * as input from '../src/input'
 import * as issue from '../src/issue'
 
-test('converting input with text a single line of to issue options', async () => {
+test('converting input with text of a single line to issue options', async () => {
   let coreInput = new CoreInputBuilder().withMinimum()
 
   let issueOptions = input.toIssueOptions(coreInput.get())
@@ -14,7 +14,15 @@ test('converting input with text a single line of to issue options', async () =>
   })
 })
 
-test('converting input with text with multiple lines to issue options', async () => {
+test('converting input with text of a single line with prefixed ##', async () => {
+  let coreInput = new CoreInputBuilder().withMinimum().set('text', '## some-text ##')
+
+  let issueOptions = input.toIssueOptions(coreInput.get())
+
+  expect(issueOptions.title).toEqual('some-text ##')
+})
+
+test('converting input with text of multiple lines', async () => {
   const body = `a line
   another line`
   const text = `some-text
@@ -24,13 +32,8 @@ ${body}`
 
   let issueOptions = input.toIssueOptions(coreInput.get())
 
-  expect(issueOptions).toStrictEqual({
-    owner: 'some-owner',
-    repo: 'some-repo',
-    title: 'some-text',
-    body,
-    token: 'some-token'
-  })
+  expect(issueOptions.title).toEqual('some-text')
+  expect(issueOptions.body).toEqual(body)
 })
 
 class CoreInputBuilder {

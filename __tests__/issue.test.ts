@@ -15,13 +15,13 @@ describe('When creating a issue', () => {
     nock.enableNetConnect()
   })
 
-  describe('with a valid repository and owner', () => {
+  describe('with a repository and owner', () => {
     beforeEach(() => {
       issueOptions.owner = 'some-organization'
       issueOptions.repo = 'some-repository'
     })
 
-    describe('and with a title with no special characters', () => {
+    describe('and with a title', () => {
       beforeEach(() => {
         issueOptions.title = 'some title'
       })
