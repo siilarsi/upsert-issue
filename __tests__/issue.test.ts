@@ -1,9 +1,8 @@
-import {upsertIssue} from '../src/issue'
-import {Options} from '../src/input'
+import * as issue from '../src/issue'
 import nock from 'nock'
 
 describe('When the action is triggered', () => {
-  let issueOptions: Options = {
+  let issueOptions: issue.Options = {
     title: '',
     organization: '',
     repository: '',
@@ -41,7 +40,7 @@ describe('When the action is triggered', () => {
           })
           .reply(200)
 
-        await upsertIssue(issueOptions)
+        await issue.create(issueOptions)
 
         expect(requests.pendingMocks()).toStrictEqual([])
         expect(actualRequestBody).toStrictEqual({
@@ -66,7 +65,7 @@ describe('When the action is triggered', () => {
             )
             .reply(200)
 
-          await upsertIssue(issueOptions)
+          await issue.create(issueOptions)
 
           expect(requests.pendingMocks()).toStrictEqual([])
           expect(actualRequestBody).toStrictEqual({

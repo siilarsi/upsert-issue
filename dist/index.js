@@ -90,17 +90,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.upsertIssue = void 0;
+exports.create = void 0;
 const github = __importStar(__webpack_require__(438));
-function upsertIssue(options) {
+function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(options.token);
         const title = options.title;
         const body = options.body;
-        yield octokit.issues.create(Object.assign({ owner: options.organization, repo: options.repository, title }, body && { body }));
+        yield octokit.issues.create(Object.assign({ owner: options.organization, repo: options.repository, title }, (body && { body })));
     });
 }
-exports.upsertIssue = upsertIssue;
+exports.create = create;
 
 
 /***/ }),
@@ -1473,7 +1473,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const core = __importStar(__webpack_require__(186));
-const issue_1 = __webpack_require__(18);
+const issue = __importStar(__webpack_require__(18));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -1482,7 +1482,7 @@ function run() {
             const token = core.getInput('token');
             const orgName = repository.split('/')[0];
             const repoName = repository.split('/')[1];
-            issue_1.upsertIssue({
+            issue.create({
                 repository: repoName,
                 organization: orgName,
                 token,

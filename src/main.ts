@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {upsertIssue} from './issue'
+import * as issue from './issue'
 
 async function run(): Promise<void> {
   try {
@@ -8,7 +8,7 @@ async function run(): Promise<void> {
     const token: string = core.getInput('token')
     const orgName: string = repository.split('/')[0]
     const repoName: string = repository.split('/')[1]
-    upsertIssue({
+    issue.create({
       repository: repoName,
       organization: orgName,
       token,
