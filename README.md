@@ -32,7 +32,7 @@ will be used instead, ignoring this field.
 ### `file_repository`
 
 The repository where to retrive the file from to be used instead of `text`,
-only valid if used with `file_path`
+only valid if used with `file_path`. Defaults to the local repository.
 
 ### `file_path`
 

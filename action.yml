@@ -20,6 +20,7 @@ inputs:
   file_repository:
     required: false
     description: 'the repository of the (markdown) file to use as comment/issue title & body'
+    default: ${{ github.repository }}
   file_path:
     required: false
     description: 'the path to the to the file in the provided repository to use as comment/issue title & body, eg. "documentation/how-to.md'
