@@ -10,7 +10,7 @@ async function run(): Promise<void> {
     const repoName: string = repository.split('/')[1]
     issue.create({
       repository: repoName,
-      organization: orgName,
+      owner: orgName,
       token,
       title: text
     })

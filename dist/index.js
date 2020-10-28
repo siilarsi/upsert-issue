@@ -97,7 +97,7 @@ function create(options) {
         const octokit = github.getOctokit(options.token);
         const title = options.title;
         const body = options.body;
-        yield octokit.issues.create(Object.assign({ owner: options.organization, repo: options.repository, title }, (body && { body })));
+        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repository, title }, (body && { body })));
     });
 }
 exports.create = create;
@@ -1484,7 +1484,7 @@ function run() {
             const repoName = repository.split('/')[1];
             issue.create({
                 repository: repoName,
-                organization: orgName,
+                owner: orgName,
                 token,
                 title: text
             });

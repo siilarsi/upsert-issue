@@ -1,13 +1,8 @@
 import * as issue from '../src/issue'
 import nock from 'nock'
 
-describe('When the action is triggered', () => {
-  let issueOptions: issue.Options = {
-    title: '',
-    organization: '',
-    repository: '',
-    token: ''
-  }
+describe('When creating a issue', () => {
+  let issueOptions: any = {}
 
   beforeEach(() => {
     nock.disableNetConnect()
@@ -20,21 +15,21 @@ describe('When the action is triggered', () => {
     nock.enableNetConnect()
   })
 
-  describe('with a valid repository and organization', () => {
+  describe('with a valid repository and owner', () => {
     beforeEach(() => {
-      issueOptions.organization = 'organization'
-      issueOptions.repository = 'repository'
+      issueOptions.owner = 'some-organization'
+      issueOptions.repository = 'some-repository'
     })
 
     describe('and with a title with no special characters', () => {
       beforeEach(() => {
-        issueOptions.title = 'a simple title'
+        issueOptions.title = 'some title'
       })
 
-      it('should create the issue in the provided repository with the provided title and no body', async () => {
+      it('should be created with the title and no body', async () => {
         let actualRequestBody = {}
         let requests = nock('https://api.github.com')
-          .post(`/repos/organization/repository/issues`, (requestBody: any) => {
+          .post(`/repos/some-organization/some-repository/issues`, (requestBody: any) => {
             actualRequestBody = requestBody
             return true
           })
@@ -50,14 +45,14 @@ describe('When the action is triggered', () => {
 
       describe('and a body', () => {
         beforeEach(() => {
-          issueOptions.body = 'a small body'
+          issueOptions.body = 'some body'
         })
 
-        it('should create the issue in the provided repository with the given text and body', async () => {
+        it('should be created with the title and body', async () => {
           let actualRequestBody = {}
           let requests = nock('https://api.github.com')
             .post(
-              `/repos/organization/repository/issues`,
+              `/repos/some-organization/some-repository/issues`,
               (requestBody: any) => {
                 actualRequestBody = requestBody
                 return true

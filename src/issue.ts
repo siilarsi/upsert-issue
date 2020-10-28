@@ -2,7 +2,7 @@ import * as github from '@actions/github'
 
 export interface Options {
   title: string
-  organization: string
+  owner: string
   repository: string
   body?: string
   token: string
@@ -13,7 +13,7 @@ export async function create(options: Options): Promise<void> {
   const title = options.title
   const body = options.body
   await octokit.issues.create({
-    owner: options.organization,
+    owner: options.owner,
     repo: options.repository,
     title,
     ...(body && {body})
