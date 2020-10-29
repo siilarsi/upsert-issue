@@ -22,7 +22,7 @@ jobs:
       - name: create issue with default parameters
         id: issue
         uses: ./
-      - name: output response from GitHub issue creation
+      - name: output response from issue creation
         run: |
           cat <<EOM
           ${{ steps.issue.outputs.github_response_body }}

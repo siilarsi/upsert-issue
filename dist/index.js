@@ -90,29 +90,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createComment = exports.create = void 0;
+exports.create = void 0;
 const github = __importStar(__webpack_require__(438));
 function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (options.title === undefined) {
+            throw new Error('"title" is required when creating a new issue');
+        }
         const octokit = github.getOctokit(options.token);
         const body = options.body;
-        const result = yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title: options.title }, { body }));
-        return JSON.stringify(result);
+        const response = yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title: options.title }, { body }));
+        return JSON.stringify(response);
     });
 }
 exports.create = create;
-function createComment(options) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const octokit = github.getOctokit(options.token);
-        yield octokit.issues.createComment({
-            owner: options.owner,
-            repo: options.repo,
-            issue_number: options.issue_number,
-            body: options.body
-        });
-    });
-}
-exports.createComment = createComment;
 
 
 /***/ }),
@@ -1492,7 +1483,7 @@ function run() {
         try {
             const options = input.toIssueOptions(core.getInput);
             const responseBody = yield issue.create(options);
-            core.setOutput("github_response_body", responseBody);
+            core.setOutput('github_response_body', responseBody);
         }
         catch (error) {
             core.setFailed(error.message);
@@ -4948,16 +4939,15 @@ module.exports = require("net");
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.toIssueOptions = void 0;
-function toIssueOptions(getInput) {
-    const owner = getInput('repository').split('/')[0];
-    const repo = getInput('repository').split('/')[1];
-    const text = getInput('text').split(/\r?\n/);
-    const title = text[0].replace(/^[\s#]+/g, '');
-    const body = text.slice(2).join('\n');
-    const token = getInput('token');
+function toIssueOptions(get) {
+    const owner = get('repository').split('/')[0];
+    const repo = get('repository').split('/')[1];
+    const token = get('token');
+    const title = get('title');
+    const body = get('body');
     return Object.assign(Object.assign({ owner,
         repo,
-        title }, (body && { body })), { token });
+        token }, (title && { title })), (body && { body }));
 }
 exports.toIssueOptions = toIssueOptions;
 

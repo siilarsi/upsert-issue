@@ -2,30 +2,17 @@ name: 'upsert issue'
 description: 'Create or update an issue with a comment from a file input or a path to a (readme) file'
 author: 'siilarsi'
 inputs:
+  title:
+    description: The title of the issue to create or update, mandatory if creating a new issue
+  body:
+    description: The content of the issue to create or update
   repository:
-    required: false
-    description: 'the repository "owner/repo" for the issue'
+    description: The repository "owner/repo" for the issue
     default: ${{ github.repository }}
   issue_number:
-    required: false
-    description: 'if provided a comment is created in issue otherwise a new issue is created'
-  text:
-    required: false
-    description: 'the text for the issue title & body or issue comment, only used if file not provided'
-    default: |
-      Issue created with GitHub action siilarsi/upsert-issue
-
-      Default text when no text or (markdown) file provided.
-      Please see the [documentation](https://github.com/siilarsi/upsert-issue/blob/main/README.md) for how to properly use this action.
-  file_repository:
-    required: false
-    description: 'the repository of the (markdown) file to use as comment/issue title & body'
-    default: ${{ github.repository }}
-  file_path:
-    required: false
-    description: 'the path to the to the file in the provided repository to use as comment/issue title & body, eg. "documentation/how-to.md'
+    description: The issue to update if not provided a new issue will be created
   token:
-    description: 'the token to be used for creating issue, defaults to the local repositorys token if not provided'
+    description: the token to be used for creating the issue, defaults to the local repositorys token
     default: ${{ github.token }}
 outputs:
   github_response_body:

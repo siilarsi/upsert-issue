@@ -8,9 +8,9 @@ describe('When creating an issue for a repository', () => {
   let requests: any
   beforeEach(() => {
     options = {
-      token: 'abc123',
       owner: 'some-org',
-      repo: 'some-repo'
+      repo: 'some-repo',
+      token: 'abc123'
     }
     nock.disableNetConnect()
     nock.abortPendingRequests()
@@ -35,7 +35,7 @@ describe('When creating an issue for a repository', () => {
       actualResponseBody = await issue.create(options)
     })
 
-    it('should invoke GitHub API route for issues', () => {
+    it('should invoke the GitHub API route for issues', () => {
       expect(requests.pendingMocks()).toStrictEqual([])
     })
 
@@ -71,51 +71,6 @@ describe('When creating an issue for a repository', () => {
     it('should have both the title and body in the request body', () => {
       expect(actualRequestBody).toStrictEqual({
         title: options.title,
-        body: options.body
-      })
-    })
-  })
-})
-
-describe('When creating an comment in an issue', () => {
-  let options: any = {}
-  let actualRequestBody = {}
-  let requests: any
-  let commentPath = '/repos/some-org/some-repo/issues/123/comments'
-  beforeEach(() => {
-    options = {
-      token: 'abc123',
-      owner: 'some-org',
-      repo: 'some-repo',
-      issue_number: 123
-    }
-    nock.disableNetConnect()
-    nock.abortPendingRequests()
-    requests = nock('https://api.github.com')
-      .post(commentPath, (requestBody: any) => {
-        actualRequestBody = requestBody
-        return true
-      })
-      .reply(200)
-  })
-
-  afterEach(() => {
-    nock.cleanAll()
-    nock.enableNetConnect()
-  })
-
-  describe('with a body', () => {
-    beforeEach(async () => {
-      options.body = 'some body'
-      await issue.createComment(options)
-    })
-
-    it('should invoke GitHub API route for issue comments', () => {
-      expect(requests.pendingMocks()).toStrictEqual([])
-    })
-
-    it('should have the body in the request body', () => {
-      expect(actualRequestBody).toStrictEqual({
         body: options.body
       })
     })

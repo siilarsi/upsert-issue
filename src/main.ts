@@ -4,7 +4,7 @@ import * as input from './input'
 
 async function run(): Promise<void> {
   try {
-    const options: issue.Options = input.toIssueOptions(core.getInput)
+    const options = input.toIssueOptions(core.getInput)
     const responseBody = await issue.create(options)
     core.setOutput('github_response_body', responseBody)
   } catch (error) {

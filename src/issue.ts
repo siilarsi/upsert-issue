@@ -1,41 +1,19 @@
 import * as github from '@actions/github'
+import * as input from './input'
 
-export interface Options {
-  owner: string
-  repo: string
-  title: string
-  body?: string
-  token: string
-}
+export async function create(options: input.IssueOptions): Promise<string> {
+  if (options.title === undefined) {
+    throw new Error('"title" is required when creating a new issue')
+  }
 
-export async function create(options: Options): Promise<string> {
   const octokit = github.getOctokit(options.token)
   const body = options.body
-  const result = await octokit.issues.create({
+  const response = await octokit.issues.create({
     owner: options.owner,
     repo: options.repo,
     title: options.title,
     ...{body}
   })
 
-  return JSON.stringify(result)
-}
-
-export interface CommentOptions {
-  owner: string
-  repo: string
-  issue_number: number
-  title: string
-  body: string
-  token: string
-}
-
-export async function createComment(options: CommentOptions): Promise<void> {
-  const octokit = github.getOctokit(options.token)
-  await octokit.issues.createComment({
-    owner: options.owner,
-    repo: options.repo,
-    issue_number: options.issue_number,
-    body: options.body
-  })
+  return JSON.stringify(response)
 }

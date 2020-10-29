@@ -1,19 +1,25 @@
-import * as issue from './issue'
+type getInput = (key: string) => string
 
-export function toIssueOptions(
-  getInput: (key: string) => string
-): issue.Options {
-  const owner = getInput('repository').split('/')[0]
-  const repo = getInput('repository').split('/')[1]
-  const text = getInput('text').split(/\r?\n/)
-  const title = text[0].replace(/^[\s#]+/g, '')
-  const body = text.slice(2).join('\n')
-  const token = getInput('token')
+export interface IssueOptions {
+  owner: string
+  repo: string
+  issue_number?: number
+  token: string
+  title?: string
+  body?: string
+}
+
+export function toIssueOptions(get: getInput): IssueOptions {
+  const owner = get('repository').split('/')[0]
+  const repo = get('repository').split('/')[1]
+  const token = get('token')
+  const title = get('title')
+  const body = get('body')
   return {
     owner,
     repo,
-    title,
-    ...(body && {body}),
-    token
+    token,
+    ...(title && {title}),
+    ...(body && {body})
   }
 }
