@@ -18,3 +18,22 @@ export async function create(options: Options): Promise<void> {
     ...{body}
   })
 }
+
+export interface CommentOptions {
+  owner: string
+  repo: string
+  issue_number: number
+  title: string
+  body: string
+  token: string
+}
+
+export async function createComment(options: CommentOptions): Promise<void> {
+  const octokit = github.getOctokit(options.token)
+  await octokit.issues.createComment({
+    owner: options.owner,
+    repo: options.repo,
+    issue_number: options.issue_number,
+    body: options.body
+  })
+}

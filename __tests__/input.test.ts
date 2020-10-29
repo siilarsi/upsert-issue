@@ -15,7 +15,9 @@ test('converting input with text of a single line to issue options', async () =>
 })
 
 test('converting input with text of a single line with prefixed ##', async () => {
-  let coreInput = new CoreInputBuilder().withMinimum().set('text', '## some-text ##')
+  let coreInput = new CoreInputBuilder()
+    .withMinimum()
+    .set('text', '## some-text ##')
 
   let issueOptions = input.toIssueOptions(coreInput.get())
 
@@ -52,10 +54,8 @@ class CoreInputBuilder {
   }
 
   get() {
-    const getCoreInput = (key: string) => {
-      let value: string = this.coreInput.get(key)!
-      return value
+    return (key: string) => {
+      return this.coreInput.get(key)!
     }
-    return getCoreInput
   }
 }

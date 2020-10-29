@@ -1,7 +1,7 @@
 import * as issue from '../src/issue'
 import nock from 'nock'
 
-describe('When creating a issue', () => {
+describe('When creating an issue', () => {
   let issueOptions: any = {}
 
   beforeEach(() => {
@@ -15,7 +15,7 @@ describe('When creating a issue', () => {
     nock.enableNetConnect()
   })
 
-  describe('with a repository and owner', () => {
+  describe('with all identifying path variables', () => {
     beforeEach(() => {
       issueOptions.owner = 'some-organization'
       issueOptions.repo = 'some-repository'
@@ -70,6 +70,55 @@ describe('When creating a issue', () => {
             title: issueOptions.title,
             body: issueOptions.body
           })
+        })
+      })
+    })
+  })
+})
+
+describe('When creating an issue comment', () => {
+  let issueCommentOptions: any = {}
+
+  beforeEach(() => {
+    nock.disableNetConnect()
+    nock.abortPendingRequests()
+    issueCommentOptions.token = 'abc123'
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
+  })
+
+  describe('with all identifying path variables', () => {
+    beforeEach(() => {
+      issueCommentOptions.owner = 'some-organization'
+      issueCommentOptions.repo = 'some-repository'
+      issueCommentOptions.issue_number = 123
+    })
+
+    describe('and with a body', () => {
+      beforeEach(() => {
+        issueCommentOptions.body = 'some body'
+      })
+
+      it('should be created with the body', async () => {
+        let actualRequestBody = {}
+        let requests = nock('https://api.github.com')
+          .post(
+            `/repos/some-organization/some-repository/issues/123/comments`,
+            (requestBody: any) => {
+              actualRequestBody = requestBody
+              return true
+            }
+          )
+          .reply(200)
+
+        await issue.createComment(issueCommentOptions)
+
+        expect(requests.pendingMocks()).toStrictEqual([])
+        expect(actualRequestBody).toStrictEqual({
+          body: issueCommentOptions.body
         })
       })
     })

@@ -24,7 +24,7 @@ for the body.
 If `issue_number` is provided and instead a new comment is created in the
 referred issue, then the whole text is used as-is.
 
-If not provided, the text will default to a description of the actions origin and usage.
+If not provided, the text will default to a description of the origin and usage of the action.
 
 If instead `file_repository` and `file_path` are provided and valid, then they
 will be used instead, ignoring this field.

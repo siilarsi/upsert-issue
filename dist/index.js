@@ -90,7 +90,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = void 0;
+exports.createComment = exports.create = void 0;
 const github = __importStar(__webpack_require__(438));
 function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -100,6 +100,18 @@ function create(options) {
     });
 }
 exports.create = create;
+function createComment(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = github.getOctokit(options.token);
+        yield octokit.issues.createComment({
+            owner: options.owner,
+            repo: options.repo,
+            issue_number: options.issue_number,
+            body: options.body
+        });
+    });
+}
+exports.createComment = createComment;
 
 
 /***/ }),
@@ -4938,7 +4950,7 @@ function toIssueOptions(getInput) {
     const owner = getInput('repository').split('/')[0];
     const repo = getInput('repository').split('/')[1];
     const text = getInput('text').split(/\r?\n/);
-    const title = text[0];
+    const title = text[0].replace(/^[\s#]+/g, '');
     const body = text.slice(2).join('\n');
     const token = getInput('token');
     return Object.assign(Object.assign({ owner,
