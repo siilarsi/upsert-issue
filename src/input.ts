@@ -9,7 +9,6 @@ export function toIssueOptions(
   const title = text[0].replace(/^[\s#]+/g, '')
   const body = text.slice(2).join('\n')
   const token = getInput('token')
-
   return {
     owner,
     repo,

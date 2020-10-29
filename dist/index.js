@@ -1491,8 +1491,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const options = input.toIssueOptions(core.getInput);
-            const result = yield issue.create(options);
-            core.info(result);
+            const responseBody = yield issue.create(options);
+            core.setOutput("github_response_body", responseBody);
         }
         catch (error) {
             core.setFailed(error.message);

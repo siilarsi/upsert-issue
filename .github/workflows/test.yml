@@ -19,4 +19,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./
+      - name: create issue with default parameters
+        id: issue
+        uses: ./
+      - name: output response from GitHub issue creation
+        run: |
+          cat <<EOM
+          ${{ steps.issue.outputs.github_response_body }}
+          EOM

@@ -1,13 +1,25 @@
 import * as issue from '../src/issue'
 import nock from 'nock'
 
-describe('When creating an issue', () => {
-  let issueOptions: any = {}
-
+describe('When creating an issue for a repository', () => {
+  let options: any = {}
+  let actualRequestBody = {}
+  let issuePath = '/repos/some-org/some-repo/issues'
+  let requests: any
   beforeEach(() => {
+    options = {
+      token: 'abc123',
+      owner: 'some-org',
+      repo: 'some-repo'
+    }
     nock.disableNetConnect()
     nock.abortPendingRequests()
-    issueOptions.token = 'abc123'
+    requests = nock('https://api.github.com')
+      .post(issuePath, (requestBody: any) => {
+        actualRequestBody = requestBody
+        return true
+      })
+      .reply(200, {id: 123})
   })
 
   afterEach(() => {
@@ -15,74 +27,76 @@ describe('When creating an issue', () => {
     nock.enableNetConnect()
   })
 
-  describe('with all identifying path variables', () => {
-    beforeEach(() => {
-      issueOptions.owner = 'some-organization'
-      issueOptions.repo = 'some-repository'
+  describe('with a title and without a body', () => {
+    let actualResponseBody: any = {}
+    beforeEach(async () => {
+      options.title = 'some title'
+
+      actualResponseBody = await issue.create(options)
     })
 
-    describe('and with a title', () => {
-      beforeEach(() => {
-        issueOptions.title = 'some title'
+    it('should invoke GitHub API route for issues', () => {
+      expect(requests.pendingMocks()).toStrictEqual([])
+    })
+
+    it('should have the title without the body in the request body', () => {
+      expect(actualRequestBody).toStrictEqual({
+        title: options.title
       })
+    })
 
-      it('should be created with the title and no body', async () => {
-        let actualRequestBody = {}
-        let requests = nock('https://api.github.com')
-          .post(
-            `/repos/some-organization/some-repository/issues`,
-            (requestBody: any) => {
-              actualRequestBody = requestBody
-              return true
-            }
-          )
-          .reply(200)
+    it('should return the response body from the GitHub API', () => {
+      const expected = {
+        data: {
+          id: 123
+        },
+        headers: {
+          'content-type': 'application/json'
+        },
+        status: 200,
+        url: `https://api.github.com${issuePath}`
+      }
+      expect(JSON.parse(actualResponseBody)).toStrictEqual(expected)
+    })
+  })
 
-        await issue.create(issueOptions)
+  describe('with both a title and body', () => {
+    beforeEach(async () => {
+      options.title = 'some title'
+      options.body = 'some body'
 
-        expect(requests.pendingMocks()).toStrictEqual([])
-        expect(actualRequestBody).toStrictEqual({
-          title: issueOptions.title
-        })
-      })
+      await issue.create(options)
+    })
 
-      describe('and a body', () => {
-        beforeEach(() => {
-          issueOptions.body = 'some body'
-        })
-
-        it('should be created with the title and body', async () => {
-          let actualRequestBody = {}
-          let requests = nock('https://api.github.com')
-            .post(
-              `/repos/some-organization/some-repository/issues`,
-              (requestBody: any) => {
-                actualRequestBody = requestBody
-                return true
-              }
-            )
-            .reply(200)
-
-          await issue.create(issueOptions)
-
-          expect(requests.pendingMocks()).toStrictEqual([])
-          expect(actualRequestBody).toStrictEqual({
-            title: issueOptions.title,
-            body: issueOptions.body
-          })
-        })
+    it('should have both the title and body in the request body', () => {
+      expect(actualRequestBody).toStrictEqual({
+        title: options.title,
+        body: options.body
       })
     })
   })
 })
 
-describe('When creating an issue comment', () => {
-  let issueCommentOptions: any = {}
-
+describe('When creating an comment in an issue', () => {
+  let options: any = {}
+  let actualRequestBody = {}
+  let requests: any
+  let commentPath = '/repos/some-org/some-repo/issues/123/comments'
   beforeEach(() => {
+    options = {
+      token: 'abc123',
+      owner: 'some-org',
+      repo: 'some-repo',
+      issue_number: 123
+    }
     nock.disableNetConnect()
     nock.abortPendingRequests()
-    issueCommentOptions.token = 'abc123'
+    requests = nock('https://api.github.com')
+      .post(commentPath, (requestBody: any) => {
+        actualRequestBody = requestBody
+        return true
+      })
+      .reply(200)
   })
 
   afterEach(() => {
@@ -90,36 +104,19 @@ describe('When creating an issue comment', () => {
     nock.enableNetConnect()
   })
 
-  describe('with all identifying path variables', () => {
-    beforeEach(() => {
-      issueCommentOptions.owner = 'some-organization'
-      issueCommentOptions.repo = 'some-repository'
-      issueCommentOptions.issue_number = 123
+  describe('with a body', () => {
+    beforeEach(async () => {
+      options.body = 'some body'
+      await issue.createComment(options)
     })
 
-    describe('and with a body', () => {
-      beforeEach(() => {
-        issueCommentOptions.body = 'some body'
-      })
+    it('should invoke GitHub API route for issue comments', () => {
+      expect(requests.pendingMocks()).toStrictEqual([])
+    })
 
-      it('should be created with the body', async () => {
-        let actualRequestBody = {}
-        let requests = nock('https://api.github.com')
-          .post(
-            `/repos/some-organization/some-repository/issues/123/comments`,
-            (requestBody: any) => {
-              actualRequestBody = requestBody
-              return true
-            }
-          )
-          .reply(200)
-
-        await issue.createComment(issueCommentOptions)
-
-        expect(requests.pendingMocks()).toStrictEqual([])
-        expect(actualRequestBody).toStrictEqual({
-          body: issueCommentOptions.body
-        })
+    it('should have the body in the request body', () => {
+      expect(actualRequestBody).toStrictEqual({
+        body: options.body
       })
     })
   })

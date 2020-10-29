@@ -27,6 +27,9 @@ inputs:
   token:
     description: 'the token to be used for creating issue, defaults to the local repositorys token if not provided'
     default: ${{ github.token }}
+outputs:
+  github_response_body:
+    description: the response body returned from the GitHub API when creating an issue or issue comment
 runs:
   using: 'node12'
   main: 'dist/index.js'

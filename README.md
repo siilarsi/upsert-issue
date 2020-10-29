@@ -12,7 +12,8 @@ repository of the executing workflow.
 
 ### `issue_number`
 
-The issue number where a new comment should be created, if not provided a new issue is created.
+The issue number where a new comment should be created, if not provided a new
+issue is created.
 
 ### `text`
 
@@ -24,7 +25,8 @@ for the body.
 If `issue_number` is provided and instead a new comment is created in the
 referred issue, then the whole text is used as-is.
 
-If not provided, the text will default to a description of the origin and usage of the action.
+If not provided, the text will default to a description of the origin and usage
+of the action.
 
 If instead `file_repository` and `file_path` are provided and valid, then they
 will be used instead, ignoring this field.
@@ -43,3 +45,10 @@ The relative filepath to the file to be used instead of `text`, eg.
 
 Only necessary to provide if creating an issue in a private, non-local,
 repository. Defaults to the local repositorys token.
+
+## Outputs
+
+### `github_response_body`
+
+The response body returned from the GitHub API when creating an issue or issue
+comment.
