@@ -5,7 +5,8 @@ import * as input from './input'
 async function run(): Promise<void> {
   try {
     const options: issue.Options = input.toIssueOptions(core.getInput)
-    issue.create(options)
+    const result = await issue.create(options)
+    core.info(result)
   } catch (error) {
     core.setFailed(error.message)
   }

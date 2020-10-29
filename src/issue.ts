@@ -8,15 +8,17 @@ export interface Options {
   token: string
 }
 
-export async function create(options: Options): Promise<void> {
+export async function create(options: Options): Promise<string> {
   const octokit = github.getOctokit(options.token)
   const body = options.body
-  await octokit.issues.create({
+  const result = await octokit.issues.create({
     owner: options.owner,
     repo: options.repo,
     title: options.title,
     ...{body}
   })
+
+  return JSON.stringify(result)
 }
 
 export interface CommentOptions {

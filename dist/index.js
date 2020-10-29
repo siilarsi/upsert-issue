@@ -96,7 +96,8 @@ function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(options.token);
         const body = options.body;
-        yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title: options.title }, { body }));
+        const result = yield octokit.issues.create(Object.assign({ owner: options.owner, repo: options.repo, title: options.title }, { body }));
+        return JSON.stringify(result);
     });
 }
 exports.create = create;
@@ -1490,7 +1491,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const options = input.toIssueOptions(core.getInput);
-            issue.create(options);
+            const result = yield issue.create(options);
+            core.info(result);
         }
         catch (error) {
             core.setFailed(error.message);
