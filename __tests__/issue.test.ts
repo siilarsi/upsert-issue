@@ -27,6 +27,12 @@ describe('When creating an issue for a repository', () => {
     nock.enableNetConnect()
   })
 
+  describe('without a title', () => {
+    it('should throw an error', async () => {
+      await expect(issue.create(options)).rejects.toThrow()
+    })
+  })
+
   describe('with a title and without a body', () => {
     let actualResponseBody: any = {}
     beforeEach(async () => {

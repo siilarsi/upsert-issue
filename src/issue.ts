@@ -14,6 +14,5 @@ export async function create(options: input.IssueOptions): Promise<string> {
     title: options.title,
     ...{body}
   })
-
   return JSON.stringify(response)
 }
