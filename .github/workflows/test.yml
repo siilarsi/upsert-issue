@@ -22,6 +22,8 @@ jobs:
       - name: create issue with default parameters
         id: issue
         uses: ./
+        with:
+          title: some title
       - name: output response from issue creation
         run: |
           cat <<EOM
