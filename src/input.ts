@@ -10,7 +10,7 @@ export interface IssueOptions {
 }
 
 export function toIssueOptions(get: getInput): IssueOptions {
-  const repository  = get('repository')
+  const repository = get('repository')
   const repositoryArr = repository.split('/')
   const owner = repositoryArr[0]
   const repo = repositoryArr[1]
@@ -21,9 +21,18 @@ export function toIssueOptions(get: getInput): IssueOptions {
   const token = get('token')
   const title = get('title')
   const body = get('body')
+  const maybe_issue_number = get('issue_number')
+  let issue_number = 0
+  if (maybe_issue_number !== undefined && isNaN(+maybe_issue_number)) {
+    throw new Error()
+  } else if (maybe_issue_number !== undefined) {
+    issue_number = +maybe_issue_number
+  }
+
   return {
     owner,
     repo,
+    ...(maybe_issue_number && {issue_number}),
     token,
     ...(title && {title}),
     ...(body && {body})
