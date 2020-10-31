@@ -46,9 +46,7 @@ describe('When creating an issue for a repository', () => {
     })
 
     it('should have the title without the body in the request body', () => {
-      expect(actualRequestBody).toStrictEqual({
-        title: options.title
-      })
+      expect(actualRequestBody).toStrictEqual({title: options.title})
     })
 
     it('should return the response body from the GitHub API', () => {

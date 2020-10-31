@@ -10,8 +10,14 @@ export interface IssueOptions {
 }
 
 export function toIssueOptions(get: getInput): IssueOptions {
-  const owner = get('repository').split('/')[0]
-  const repo = get('repository').split('/')[1]
+  const repository  = get('repository')
+  const repositoryArr = repository.split('/')
+  const owner = repositoryArr[0]
+  const repo = repositoryArr[1]
+  if (repositoryArr.length !== 2 || owner.length === 0 || repo.length === 0) {
+    throw Error(`"repository": "${repository}" must have format "owner/repo"`)
+  }
+
   const token = get('token')
   const title = get('title')
   const body = get('body')
