@@ -90,7 +90,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = void 0;
+exports.update = exports.create = void 0;
 const github = __importStar(__webpack_require__(438));
 function create(options) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -104,6 +104,18 @@ function create(options) {
     });
 }
 exports.create = create;
+function update(options) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = github.getOctokit(options.token);
+        const response = yield octokit.issues.update({
+            owner: options.owner,
+            repo: options.repo,
+            issue_number: options.issue_number
+        });
+        return JSON.stringify(response);
+    });
+}
+exports.update = update;
 
 
 /***/ }),
@@ -4950,9 +4962,16 @@ function toIssueOptions(get) {
     const token = get('token');
     const title = get('title');
     const body = get('body');
-    return Object.assign(Object.assign({ owner,
-        repo,
-        token }, (title && { title })), (body && { body }));
+    const maybe_issue_number = get('issue_number');
+    let issue_number = 0;
+    if (maybe_issue_number !== undefined && isNaN(+maybe_issue_number)) {
+        throw new Error();
+    }
+    else if (maybe_issue_number !== undefined) {
+        issue_number = +maybe_issue_number;
+    }
+    return Object.assign(Object.assign(Object.assign(Object.assign({ owner,
+        repo }, (maybe_issue_number && { issue_number })), { token }), (title && { title })), (body && { body }));
 }
 exports.toIssueOptions = toIssueOptions;
 

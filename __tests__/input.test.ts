@@ -30,7 +30,9 @@ test('converting complete input to issue options', async () => {
 test('issue_number input is Not a Number should throw', async () => {
   let coreInput = new CoreInputBuilder().minimum().set('issue_number', 'abc')
 
-  expect(() => {input.toIssueOptions(coreInput.get())}).toThrow()
+  expect(() => {
+    input.toIssueOptions(coreInput.get())
+  }).toThrow()
 })
 
 test('repository input with only one path variable should throw', async () => {
@@ -75,8 +77,6 @@ test('repository input without repo should throw', async () => {
 
 class CoreInputBuilder {
   coreInput: Map<string, string> = new Map<string, string>()
-  constructor() {
-  }
 
   minimum() {
     this.coreInput.set('token', 'some-token')

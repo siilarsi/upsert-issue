@@ -16,3 +16,13 @@ export async function create(options: input.IssueOptions): Promise<string> {
   })
   return JSON.stringify(response)
 }
+
+export async function update(options: input.IssueOptions): Promise<string> {
+  const octokit = github.getOctokit(options.token)
+  const response = await octokit.issues.update({
+    owner: options.owner,
+    repo: options.repo,
+    issue_number: options.issue_number!
+  })
+  return JSON.stringify(response)
+}
