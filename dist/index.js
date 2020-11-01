@@ -107,11 +107,9 @@ exports.create = create;
 function update(options) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github.getOctokit(options.token);
-        const response = yield octokit.issues.update({
-            owner: options.owner,
-            repo: options.repo,
-            issue_number: options.issue_number
-        });
+        const title = options.title;
+        const body = options.body;
+        const response = yield octokit.issues.update(Object.assign(Object.assign({ owner: options.owner, repo: options.repo, issue_number: options.issue_number }, { title }), { body }));
         return JSON.stringify(response);
     });
 }
@@ -1494,7 +1492,13 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const options = input.toIssueOptions(core.getInput);
-            const responseBody = yield issue.create(options);
+            let responseBody = "";
+            if (options.issue_number === undefined || isNaN(options.issue_number)) {
+                responseBody = yield issue.create(options);
+            }
+            else {
+                responseBody = yield issue.update(options);
+            }
             core.setOutput('github_response_body', responseBody);
         }
         catch (error) {

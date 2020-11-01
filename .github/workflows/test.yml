@@ -19,13 +19,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: create issue with default parameters
-        id: issue
+      - name: create issue with title
+        id: issue_create
         uses: ./
         with:
           title: some title
-      - name: output response from issue creation
+      - name: output response from issue create
         run: |
           cat <<EOM
-          ${{ steps.issue.outputs.github_response_body }}
+          ${{ toJson(steps.issue_create.outputs.github_response_body) }}
           EOM
+          sleep 2
+      - name: update issue with body
+        id: issue_update
+        env:
+          issue_number: ${{ fromJson(steps.issue_create.outputs.github_response_body).data.number }}
+        uses: ./
+        with:
+          body: some body
+          issue_number: ${{ env.issue_number }}
+      - name: output response from issue update
+        run: |
+          cat <<EOM
+          ${{ toJson(steps.issue_update.outputs.github_response_body) }}
+          EOM
+

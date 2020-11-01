@@ -108,7 +108,7 @@ describe('When updating an issue in a repository', () => {
     nock.enableNetConnect()
   })
 
-  describe('with no request body', () => {
+  describe('with the minimum valid request body', () => {
     let actualResponseBody: any = {}
     beforeEach(async () => {
       actualResponseBody = await issue.update(options)
@@ -134,6 +134,27 @@ describe('When updating an issue in a repository', () => {
         url: `https://api.github.com${issuePath}`
       }
       expect(JSON.parse(actualResponseBody)).toStrictEqual(expected)
+    })
+  })
+
+  describe('with the maximum request body supported by this action', () => {
+    let actualResponseBody: any = {}
+    beforeEach(async () => {
+      options.title = 'some title'
+      options.body = 'some body'
+
+      actualResponseBody = await issue.update(options)
+    })
+
+    it('should invoke the GitHub API route for PATCH issues', () => {
+      expect(requests.pendingMocks()).toStrictEqual([])
+    })
+
+    it('should have both the title and body in the request body', () => {
+      expect(actualRequestBody).toStrictEqual({
+        title: options.title,
+        body: options.body
+      })
     })
   })
 })
